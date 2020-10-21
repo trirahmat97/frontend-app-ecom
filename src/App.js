@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment } from 'react';
+import { Switch, Route, Router } from 'react-router-dom';
+import history from './extentions/History';
+import { connect } from 'react-redux';
+import { AuthContect } from './extentions/Contentext';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import DetailProduk from './UI/Page/DetailProduk';
+import Home from './UI/Page/Home';
+import Login from './UI/Page/Login';
+import TopNavigation from './UI/TopNavigation';
+
+const App = ({ auth }) => {
+    return (
+        <Fragment>
+            <Router history={history}>
+                <AuthContect.Provider value={auth}>
+                    <TopNavigation />
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route exact path='/detail' component={DetailProduk} />
+                        <Route exact path='/login' component={Login} />
+                    </Switch>
+                </AuthContect.Provider>
+            </Router>
+        </Fragment>
+    );
+};
+
+const mapStateToProp = state => {
+    return {
+        auth: state.auth
+    }
 }
 
-export default App;
+export default connect(mapStateToProp, null)(App);
